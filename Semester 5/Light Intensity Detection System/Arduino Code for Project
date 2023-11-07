@@ -1,0 +1,32 @@
+#include <Wire.h>         // adds I2C library 
+#include <BH1750.h>       // adds BH1750 library file 
+#include <LiquidCrystal.h> // includes the LiquidCrystal Library 
+LiquidCrystal lcd(12, 11, 4, 5, 6, 7); // Creates an LCD object. Parameters: (rs, enable, d4, d5, d6, d7) 
+BH1750 lightMeter;
+#define led 13
+
+void setup() { 
+  Serial.begin(9600);         // set serial buad rate of 9600
+  Wire.begin();               // Enable I2C pins of Arduino
+  lcd.begin(16, 2);           // Defines LCD size to 16x2
+  lcd.print("Light Intensity");   //Print "Intensity in LUX" message on first line LCD     
+  lightMeter.begin();
+  pinMode(led,OUTPUT);
+  delay(2000);
+}
+
+void loop() { 
+ float lux = lightMeter.readLightLevel();
+ if(lux<=15){
+  digitalWrite(led,HIGH);
+ }
+ else{
+  digitalWrite(led,LOW);
+ }
+  lcd.setCursor(0, 1);
+  lcd.println(lux);
+  Serial.println(lux);
+  lcd.print(" lx");
+  delay(1000);
+
+}
